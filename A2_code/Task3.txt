@@ -1,0 +1,29 @@
+Perplexity values:
+ENGLISH:
+MLE: 15.87409805399258
+smoothing, delta = 0.0001: 16.26389899162003
+smoothing, delta = 0.001: 18.004686491381246
+smoothing, delta = 0.01: 24.536031821677344
+smoothing, delta = 0.1: 47.98223975457479
+smoothing, delta = 1: 146.07357554034948
+smoothing, delta = 2: 218.12459398389112
+smoothing, delta = 5: 377.18364694642116
+
+FRENCH 
+MLE: 15.270594142067146
+smoothing, delta = 0.0001: 15.835983742523009
+smoothing, delta = 0.001: 18.14667580819087
+smoothing, delta = 0.01: 26.38688635776709
+smoothing, delta = 0.1: 56.29232634074676
+smoothing, delta = 1: 190.04089885498928
+smoothing, delta = 2: 291.7053890106487
+smoothing, delta = 5: 518.3381373706006
+
+Discussion:
+According to the result, the MLE language model has the lowest perplexity, which is around 15. Hence it is the best model to predict a sample among all the language models. 
+
+The perplexity increases as delta increases. The perplexity values are similar when delta value is small, and increases to hundreds when delta approaches 1. 
+
+It can be concluded that the smoothing doesn't result in better performance than MLE model. 
+
+Also, it can be seen that the french language model has higher perplexity than english in most of the cases. This is possibly due to the fact that French has more sophisticated semantics. 

@@ -1,0 +1,66 @@
+
+Discussion :
+
+By testing on the 5k dataset using different values of EM iterations, it can be observed that the average BLEU score began to converge after 30 iterations. Hence 50 iteration is chosen to test on various data sizes. 
+
+It can be seen that the BLEU score is the highest for n=1 for all data sizes, and it is the lowest for =3. Since it is harder to match bigram and trigram to the reference text, it is expected to see a lower score for higher n. 
+
+Also, There is a general trend that the average BLEU score increases with the data size. 1k data has the lowest BLEU score, and the core increases for 10k and 15k data. However, a slight decrease in average BLEU score is observed in 30k data compared to 15k data, this is possibly due to the fact that the model is overfitting, or the sampling process is not completely random, and the files it reads fail to represent the general language alignments nature. It can be improved by randomly shuffle the sentences pair. 
+
+When testing using google along, the total average BLEU score ranges from 0.2344 to 0.2893 for data sizes 1k to 30k. When testing using Hansard along, the average BLEU score ranges from 0.2083 to 0.25. Using the google reference generates higher BLEU score than hansard. This is expected since the candidate should be more similar with google translator since they are both mahchine translation. 
+
+It can be seen that the total BLEU score would be higher when using both reference than using only one reference. This is because using different references texts tolerate more word choices. 
+
+
+----------Evaluation START----------
+
+### Evaluating AM model: AM_model_1k_50 ### 
+
+BLEU scores with N-gram (n) = 1: 	0.3750	0.4444	0.5385	0.3571	0.4615	0.5000	0.3077	0.5000	0.5000	0.4000	0.5385	0.3846	0.4444	0.4444	0.3957	0.4600	0.5000	0.4494	0.4167	0.5429	0.6250	0.6000	0.5000	0.4118	0.3750
+average 0.4589089804976666
+
+BLEU scores with N-gram (n) = 2: 	0.1581	0.2357	0.2996	0.1657	0.1961	0.2357	0.1601	0.3780	0.0000	0.0000	0.3669	0.2532	0.2357	0.2801	0.2912	0.2774	0.3333	0.3078	0.1946	0.3304	0.4226	0.4472	0.3397	0.2269	0.2315
+average 0.254700271856489
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.2304	0.0000	0.0000	0.1699	0.1877	0.0000	0.2404	0.0000	0.0000	0.0000	0.0000	0.0000	0.2126	0.0000	0.0000
+average 0.0416410407375022
+total average: 0.2517500976972193
+
+
+### Evaluating AM model: AM_model_10k_50 ### 
+
+BLEU scores with N-gram (n) = 1: 	0.3750	0.4444	0.5385	0.5000	0.3077	0.6000	0.4615	0.6250	0.3750	0.5000	0.6154	0.4615	0.5556	0.5000	0.5276	0.3834	0.4000	0.4993	0.2500	0.6334	0.7500	0.8000	0.5000	0.5294	0.3750
+average 0.5003091867067577
+
+BLEU scores with N-gram (n) = 2: 	0.1581	0.2357	0.2996	0.1961	0.1601	0.4472	0.1961	0.5175	0.0000	0.2357	0.3922	0.2774	0.2635	0.2970	0.3363	0.2532	0.2981	0.3245	0.1508	0.4371	0.5669	0.5963	0.3397	0.3151	0.2315
+average 0.30103065776335647
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.3684	0.0000	0.3547	0.0000	0.0000	0.2409	0.0000	0.0000	0.1767	0.2066	0.0000	0.2231	0.0000	0.0000	0.2785	0.3770	0.3542	0.2126	0.1877	0.0000
+average 0.11922356150174902
+total average: 0.30685446865728777
+
+
+### Evaluating AM model: AM_model_15k_50 ### 
+
+BLEU scores with N-gram (n) = 1: 	0.4375	0.4444	0.5385	0.5000	0.3846	0.6000	0.5385	0.6250	0.3750	0.6000	0.6154	0.3846	0.5556	0.5000	0.5276	0.4600	0.4000	0.4993	0.3333	0.5429	0.7500	0.8000	0.5000	0.4706	0.3750
+average 0.5103139669838308
+
+BLEU scores with N-gram (n) = 2: 	0.1708	0.2357	0.2996	0.1961	0.1790	0.4472	0.2118	0.5175	0.0000	0.4472	0.3922	0.2532	0.2635	0.2970	0.3363	0.3397	0.2981	0.3245	0.2462	0.3304	0.5669	0.5963	0.3397	0.2970	0.2315
+average 0.31270562841512534
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.3684	0.0000	0.3547	0.0000	0.2924	0.2409	0.0000	0.0000	0.1767	0.2066	0.2198	0.2231	0.0000	0.1823	0.0000	0.3770	0.3542	0.2126	0.1805	0.0000
+average 0.13557460896223925
+total average: 0.31953140145373177
+
+### Evaluating AM model: AM_model_30k_50 ### 
+
+BLEU scores with N-gram (n) = 1: 	0.4375	0.4444	0.5385	0.4286	0.4615	0.6000	0.4615	0.6250	0.3750	0.4000	0.6154	0.4615	0.5556	0.5000	0.4617	0.4600	0.4000	0.5493	0.3333	0.5429	0.7500	0.8000	0.5000	0.4706	0.3750
+average 0.5018929065195893
+
+BLEU scores with N-gram (n) = 2: 	0.1708	0.2357	0.2996	0.1816	0.1961	0.4472	0.1961	0.5175	0.0000	0.2108	0.3922	0.2774	0.2635	0.2970	0.3146	0.3397	0.2981	0.3403	0.2462	0.3304	0.5669	0.5963	0.3397	0.2970	0.2315
+average 0.30345412492147994
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.3684	0.0000	0.3547	0.0000	0.0000	0.2409	0.0000	0.0000	0.1767	0.1976	0.2198	0.2231	0.0000	0.1823	0.0000	0.3770	0.3542	0.2126	0.1805	0.0000
+average 0.12351880847883218
+total average: 0.30962194663996717
+----------Evaluation END----------

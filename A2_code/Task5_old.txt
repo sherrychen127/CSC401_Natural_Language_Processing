@@ -1,0 +1,71 @@
+
+Discussion :
+
+By testing on the 5k dataset using different values of EM iterations, it can be observed that the average BLEU score began to converge after 30 iterations. Hence 50 iteration is chosen to test on various data sizes. 
+
+It can be seen for higher n-values, BLEU score is more likely to be zero. Since it is less likely for higher n-grams to match the reference text. However, the unigram precision is a lot higher, all most all of the data set doesn't have any non-zero BLEU score, but for smaller data size like 1k, the candidate translation has no matching trigram as references. 
+
+Also, it can seen a general trend that the average BLEU score increases with the data size. 1k data has the lowest BLEU score, and the core increases for 10k and 15k data. However, a slight decrease in average BLEU score is observed in 30k data compared to 15k data, this is possibly due to the fact that the model is overfitting. 
+
+
+
+
+
+----------Evaluation START----------
+
+### Evaluating AM model: AM_model_1k_50 ### 
+1k data size, 50 iterations
+
+BLEU scores with N-gram (n) = 1: 	0.2167	0.1961	0.2849	0.2143	0.3077	0.2500	0.1415	0.2500	0.1667	0.3333	0.4167	0.1710	0.2222	0.2505	0.3077	0.3333	0.1961	0.3684	0.2283	0.4000	0.3750	0.4000	0.3571	0.2574	0.1084
+average 0.27013445909960737
+
+BLEU scores with N-gram (n) = 2: 	0.0000	0.0000	0.1326	0.0000	0.0000	0.0000	0.0000	0.1890	0.0000	0.0000	0.1946	0.1027	0.0000	0.1052	0.1601	0.1741	0.0000	0.2478	0.0000	0.2108	0.2315	0.2981	0.1657	0.1187	0.0000
+average 0.09324081465338292
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000
+average 0.0
+total average: 0.12112509125099676
+
+
+### Evaluating AM model: AM_model_10k_50 ### 
+10k data size, 50 iterations
+
+BLEU scores with N-gram (n) = 1: 	0.2167	0.1961	0.2849	0.3571	0.1538	0.2500	0.2831	0.3750	0.1667	0.4444	0.5000	0.2279	0.3333	0.2922	0.4615	0.2500	0.1961	0.4211	0.0761	0.5000	0.5000	0.6000	0.3571	0.3604	0.1084
+average 0.3164852234314997
+
+BLEU scores with N-gram (n) = 2: 	0.0000	0.0000	0.1326	0.0000	0.0000	0.0000	0.0000	0.2315	0.0000	0.2357	0.2132	0.1186	0.0000	0.1137	0.1961	0.1508	0.0000	0.2649	0.0000	0.2357	0.3780	0.3651	0.1657	0.1404	0.0000
+average 0.11768038849867889
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.2877	0.0000	0.0000	0.0000	0.0000
+average 0.011507391653295762
+total average: 0.14855766786115812
+
+
+### Evaluating AM model: AM_model_15k_50 ### 
+15k data size, 50 iterations
+
+BLEU scores with N-gram (n) = 1: 	0.2709	0.1961	0.2849	0.3571	0.2308	0.2500	0.2831	0.3750	0.1667	0.4444	0.5000	0.1710	0.3333	0.1670	0.4615	0.3333	0.1961	0.4211	0.1522	0.4000	0.5000	0.6000	0.3571	0.3089	0.1084
+average 0.3147578230069586
+
+BLEU scores with N-gram (n) = 2: 	0.0000	0.0000	0.1326	0.0000	0.0000	0.0000	0.0000	0.2315	0.0000	0.3333	0.2132	0.1027	0.0000	0.0000	0.1961	0.1741	0.0000	0.2649	0.0000	0.2108	0.3780	0.3651	0.1657	0.1838	0.0000
+average 0.11807811934522702
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.2513	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.2877	0.0000	0.0000	0.1254	0.0000
+average 0.02657568034115616
+total average: 0.15313720756444724
+
+
+### Evaluating AM model: AM_model_30k_50 ### 
+30k data size, 50 iterations
+
+BLEU scores with N-gram (n) = 1: 	0.2709	0.1961	0.3419	0.2857	0.2308	0.2500	0.2831	0.3750	0.1667	0.3333	0.5000	0.2279	0.3333	0.2087	0.3846	0.3333	0.1961	0.4737	0.1522	0.4000	0.5000	0.6000	0.3571	0.3089	0.1084
+average 0.3127134066845516
+
+BLEU scores with N-gram (n) = 2: 	0.0000	0.0000	0.1453	0.0000	0.0000	0.0000	0.0000	0.2315	0.0000	0.2041	0.2132	0.1186	0.0000	0.0000	0.1790	0.1741	0.0000	0.2810	0.0000	0.2108	0.3780	0.3651	0.1657	0.1838	0.0000
+average 0.1140110868573272
+
+BLEU scores with N-gram (n) = 3: 	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.0000	0.2877	0.0000	0.0000	0.1254	0.0000
+average 0.01652304779276744
+total average: 0.14774918044488208
+
+----------Evaluation END----------
