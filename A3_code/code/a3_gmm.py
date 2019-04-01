@@ -3,7 +3,7 @@ import numpy as np
 import os, fnmatch
 import random
 from math import *
-
+from scipy.misc import logsumexp
 
 dataDir = '/u/cs401/A3/data/'
 
@@ -31,39 +31,59 @@ def log_b_m_x(m, x, myTheta, preComputedForM=[]):
 
     '''
 
-    mu_m = myTheta.mu[m]
-    cov_m = np.diag(myTheta.Sigma[m])
+    mu_m = myTheta.mu[m] #1
+    cov_m = myTheta.Sigma[m] #(1,d)
 
-    x_minus_mu = x-mu_m
+    term1 = -1*np.sum(0.5*np.square(x)/cov_m - mu_m*x/cov_m)
 
-    exponent = np.dot(x_minus_mu.T, x_minus_mu)/cov_m
+    if len(preComputedForM) > 0:
+        log_b_m = term1 - preComputedForM[m]
+        return log_b_m
 
+    d = len(x)
+    term2 = 0.5*np.sum(np.square(mu_m)/cov_m) + d/2*log(2*pi) + 0.5*np.sum(np.log(cov_m))
+
+    log_b_m = term1 - term2
+    '''
+    x_minus_mu = x-mu_m #(1,d)
+    exponent = np.square(x_minus_mu)/cov_m #1/[1,d]
     exponent = -0.5*np.sum(exponent)
+    d = len(x)
     denominator = d/2*log(2*pi) + 1/2*np.sum(np.log(cov_m))
-
-    #log_b_per_t = -0.5*(exponent + np.log(2* pi * cov_m))
-    #log_b = sum(log_b_per_t, 2)
-
     log_b= exponent - denominator
-    return log_b
-    
+    '''
+    return log_b_m
+
+
+
+
+
+
 def log_p_m_x(m, x, myTheta):
     ''' Returns the log probability of the m^{th} component given d-dimensional vector x, and model myTheta
         See equation 2 of handout
     '''
-    weights = myTheta.weights
+
+    weights = myTheta.omega
     w = weights[m]
-    log_b = log_b_m_x(m,x, myTheta)
-    b = np.exp(log_b)
-    w_b = b*w
-    bk = np.array([log_b_m_x(i,x,myTheta) for i in range(np.size(weights)[0])])
-    wk_bk = np.dot(weights.T, bk.reshape(np.size(bk)[0], 1))
-    p_m_x = w_b/wk_bk
+    log_b = log_b_m_x(m, x, myTheta) #log == ln????
+    #b = np.exp(log_b)
+    #w_b = w*b #
+    log_w_b = logsumexp(log_b, b = w)
 
-    #sum_w_b = np.sum(w_b)
-    #p_m_x = w_b/sum_w_b
+    M = np.shape(weights)[0]
+    log_bk = np.array([log_b_m_x(i, x, myTheta) for i in range(M)])
+    #wk_bk = np.dot(bk.reshape(np.size(bk)[0], 1), weights) #(1,1)
+    #p_m_x = w_b/wk_bk
+    #log_p_m_x = log(p_m_x)
 
-    return p_m_x
+
+    log_wk_bk = logsumexp(log_bk, b = weights)
+
+    log_p_m_x_val = log_w_b - log_wk_bk
+
+    print("finished one")
+    return log_p_m_x_val
 
     
 def logLik( log_Bs, myTheta ):
@@ -128,13 +148,25 @@ def update_parameter(log_b_x, log_p_x, X, myTheta):
     return myTheta
 
 
+def pre_computed_for_M(X, myTheta):
+    (T,d) = np.shape(X)
+    mean = myTheta.mu #(M,1)
+    cov = myTheta.Sigma #(M, d)
+
+    term1 = 0.5*np.sum(np.square(mean)/cov, axis= 1) #is it (M, d)-> (M,1)
+    term2 = d/2*log(2*pi)
+    term3 = 0.5*np.sum(np.log(cov), axis = 1) #(M,1)
+
+    preComputedForM = term1 + term2 + term3
+    return preComputedForM
+
 
 def calculate_intermediate_result(X, M, myTheta):
-    log_b_x = [[log_b_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M.T)
-    #b_x = np.exp(log_b_x) #(M.T)
+    PreComputedForM = pre_computed_for_M(X, myTheta)
+    log_b_x = []
+    log_b_x = [[log_b_m_x(m, X[i], myTheta, PreComputedForM) for i in range(X.shape[0])] for m in range(M)] #(M, T)
 
     log_p_x = [[log_p_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M,T)
-    #p_x = np.exp(log_p_x)#(M,T)
 
     return log_b_x, log_p_x
 
@@ -172,7 +204,8 @@ def test( mfcc, correctID, models, k=5 ):
 
 
 if __name__ == "__main__":
-    '''
+
+
     trainThetas = []
     testMFCCs = []
     print('TODO: you will need to modify this main block for Sec 2.3')
@@ -205,5 +238,5 @@ if __name__ == "__main__":
         numCorrect += test( testMFCCs[i], i, trainThetas, k ) 
     accuracy = 1.0*numCorrect/len(testMFCCs)
     print(accuracy)
-    '''
+
 
