@@ -1,7 +1,9 @@
 import os
 import numpy as np
 
-import fnmatch
+
+import string
+import re
 dataDir = '/u/cs401/A3/data/'
 
 ############ work from home
@@ -28,11 +30,11 @@ def Levenshtein(r, h):
                                                                                 
     Examples                                                                    
     --------                                                                    
-    >>> wer("who is there".split(), "is there".split())                         
+    #>>> wer("who is there".split(), "is there".split())
     0.333 0 0 1                                                                           
-    >>> wer("who is there".split(), "".split())                                 
+    #>>> wer("who is there".split(), "".split())
     1.0 0 0 3                                                                           
-    >>> wer("".split(), "who is there".split())                                 
+    #>>> wer("".split(), "who is there".split())
     Inf 0 3 0                                                                           
     """
     n = len(r) # number of words in REF
@@ -40,10 +42,16 @@ def Levenshtein(r, h):
     R = np.zeros((n+1, m+1)) #matrix of distance
     B = np.zeros((n+1, m+1))
 
+    UP = 1
+    LEFT = 2
+    UPLEFT = 3
     for i in range(n+1):
         for j in range(m+1):
             if i == 0 or j == 0:
                 R[i][j] = max(i, j)
+            if i == 0 and j!= 0: B[i][j] = LEFT
+            if j == 0 and i != 0: B[i][j] = UP
+
     for i in range(1, n+1):
         for j in range(1, m+1):
             del_n = R[i-1][j] +1
@@ -51,40 +59,97 @@ def Levenshtein(r, h):
             ins_n = R[i][j-1]+1
             R[i][j] = min(del_n, sub_n, ins_n)
             if R[i][j] == del_n:
-                B[i][j] = 'up'
+                B[i][j] = UP
             elif R[i][j] == ins_n:
-                B[i][j] = 'left'
+                B[i][j] = LEFT
             else:
-                B[i][j] = 'up-left'
+                B[i][j] = UPLEFT
+
+    substitution, insertion, deletion = backtrack(R, B, n, m)
+    WER = R[n][m]/n
+    return WER, substitution, insertion, deletion
+
+def backtrack(R, B, n, m):
+    UP = 1
+    LEFT = 2
+    UPLEFT = 3
+
     deletion = 0
     insertion = 0
     substitution = 0
-    for i in range(len(B)):
-        for j in range(len(B[0])):
-            if B[i][j] == 'up':
-                deletion += 1
-            elif B[i][j] == 'left':
-                insertion += 1
-            else:
-                substitution += 1
-    WER = (deletion + insertion + substitution)/n
-
-    return WER, substitution, insertion, deletion
+    while n>0 or m>0:
+        cur = R[n][m]
+        if B[n][m] == UP:
+            n = n-1
+            prev = R[n][m]
+            if cur!= next: deletion += cur - prev
+        elif B[n][m] == LEFT:
+            m = m-1
+            prev = R[n][m]
+            if cur!= next: insertion += cur - prev
+        elif B[n][m] == UPLEFT:
+            m = m-1
+            n = n-1
+            prev = R[n][m]
+            if cur!= next: substitution += cur - prev
+    return int(substitution), int(insertion), int(deletion)
 
 
 def preprocess(sentence):
-    #remove punctuation except for []
-    #lowercase
-    
+    sentence = re.sub('<[^>]*>', '', sentence)     #remove label
+    for c in string.punctuation:
+        if c != '[' and c != ']':
+            sentence = sentence.replace(c, " ")    #remove punctuation except for []
+    sentence = sentence.lower()    #lowercase
+    sentence = re.sub('\s+', ' ', sentence) #remove the multiple spaces
+    return sentence.split()
+
 
 
 if __name__ == "__main__":
+    #test
+    #sentence = "0 LD/E:INTERACTIVE  m- / so so on it./ I mean, <BR> I don't know./ <BR> I did alright./ <LG> "
+    #sentence = preprocess(sentence)
+    #print(Levenshtein("".split(), "who is there".split()))
+
+
     for subdir, dirs, files in os.walk(dataDir):
         for speaker in dirs:
             print("speaker:", speaker)
 
-            ref = fnmatch.filter(os.listdir(os.path.join(dataDir, speaker)), 'transcripts.txt')
-            hyp_google = fnmatch.filter(os.listdir(os.path.join(dataDir, speaker)), 'transcripts.Google.txt')
-            hyp_kaldi = fnmatch.filter(os.listdir(os.path.join(dataDir, speaker)), 'transcripts.Kaldi.txt')
+            ref_dir = os.path.join( dataDir, speaker, 'transcripts.txt')
+            hyp_google_dir = os.path.join( dataDir, speaker, 'transcripts.Google.txt')
+            hyp_kaldi_dir =  os.path.join( dataDir, speaker, 'transcripts.Kaldi.txt')
+
+            ref_file = open(ref_dir, 'r')
+            google_file = open(hyp_google_dir, 'r')
+            kalbi_file = open(hyp_kaldi_dir, 'r')
+
+            ref = ref_file.readlines()
+            google = google_file.readlines()
+            kalbi = kalbi_file.readlines()
+
+            google_wer_history = []
+            kalbi_wer_history = []
+            #print(len(ref), len(google), len(kalbi))
+            #skip speakers when the transcript file is empty
+            if len(ref)>0:
+                for i in range(len(ref)):
+                    #preprocess
+                    ref_sentence = preprocess(ref[i])
+                    google_sentence = preprocess(google[i])
+                    kalbi_sentence = preprocess(kalbi[i])
+                    wer_google = Levenshtein(ref_sentence, google_sentence)
+                    wer_kalbi = Levenshtein(ref_sentence, kalbi_sentence)
+
+                    wer_google
+                    print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "google", i, wer_google[0], wer_google[1], wer_google[2], wer_google[3]))
+                    print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "kalbi", i, wer_kalbi[0], wer_kalbi[1], wer_kalbi[2], wer_kalbi[3]))
+
+                    #[SPEAKER] [SYSTEM] [i] [WER] S:[numSubstitutions], I:[numInsertions], D:[numDeletions]
+            ref_file.close()
+            google_file.close()
+            kalbi_file.close()
+
 
 

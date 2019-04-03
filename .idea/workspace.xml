@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64bcfd97-6286-4d6d-9829-3df84ad2b614" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/A3_code/code/a3_gmm.py" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/a3_gmm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/A3_code/code/a3_gmm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="215" column="18" lean-forward="true" selection-start-line="215" selection-start-column="18" selection-end-line="215" selection-end-column="18" />
+            <state relative-caret-position="215">
+              <caret line="278" column="77" selection-start-line="278" selection-start-column="32" selection-end-line="278" selection-end-column="77" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -26,23 +24,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file:///anaconda3/lib/python3.7/site-packages/numpy/lib/utils.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="100" selection-start-line="100" selection-end-line="100" />
+            <state relative-caret-position="-877">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/A2_code/preprocess.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="77" column="4" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="427">
+              <caret line="52" column="21" selection-start-line="52" selection-end-line="53" />
             </state>
           </provider>
         </entry>
@@ -57,6 +55,7 @@
       <find>train</find>
       <find>calculate</find>
       <find>calculate_intermediate_re</find>
+      <find>10B</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -93,6 +92,17 @@
             <path>
               <item name="CSC401_Assignments" type="b2602c69:ProjectViewProjectNode" />
               <item name="CSC401_Assignments" type="462c0819:PsiDirectoryNode" />
+              <item name="A2_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CSC401_Assignments" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CSC401_Assignments" type="462c0819:PsiDirectoryNode" />
+              <item name="A2_code" type="462c0819:PsiDirectoryNode" />
+              <item name="A2_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CSC401_Assignments" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CSC401_Assignments" type="462c0819:PsiDirectoryNode" />
               <item name="A3_code" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -123,7 +133,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.a3_gmm">
+  <component name="RunManager" selected="Python.a3_levenshtein">
     <configuration name="NLP" type="PythonConfigurationType" factoryName="Python">
       <module name="CSC401_Assignments" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -166,10 +176,77 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="a3_levenshtein" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CSC401_Assignments" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../ROB313/data/new/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/A3_code/code" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Doctests in a3_levenshtein (1)" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <module name="CSC401_Assignments" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/A3_code/code" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Doctests in a3_levenshtein" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <module name="CSC401_Assignments" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../ROB313/data/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/A3_code/code" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.a3_gmm" />
       <item itemvalue="Python.NLP" />
+      <item itemvalue="Python.a3_levenshtein" />
+      <item itemvalue="Python tests.Doctests in a3_levenshtein" />
+      <item itemvalue="Python tests.Doctests in a3_levenshtein (1)" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.a3_levenshtein" />
+        <item itemvalue="Python tests.Doctests in a3_levenshtein" />
+        <item itemvalue="Python tests.Doctests in a3_levenshtein (1)" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -184,9 +261,25 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="Doctests_in_a3_levenshtein - 2019.04.03 at 17h 01m 35s.xml">
+      <configuration name="Doctests in a3_levenshtein" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_a3_levenshtein_(1) - 2019.04.03 at 17h 01m 50s.xml">
+      <configuration name="Doctests in a3_levenshtein (1)" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_a3_levenshtein - 2019.04.03 at 17h 01m 58s.xml">
+      <configuration name="Doctests in a3_levenshtein" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_a3_levenshtein - 2019.04.03 at 17h 02m 10s.xml">
+      <configuration name="Doctests in a3_levenshtein" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Doctests_in_a3_levenshtein - 2019.04.03 at 17h 03m 04s.xml">
+      <configuration name="Doctests in a3_levenshtein" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07466243" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -194,7 +287,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23150685" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.43295637" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.22876713" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -259,21 +352,48 @@
           <line>90</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
+          <line>98</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
+          <line>102</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
+          <line>54</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file:///anaconda3/lib/python3.7/site-packages/numpy/lib/utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
+        <state relative-caret-position="-78">
           <caret line="100" selection-start-line="100" selection-end-line="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/A2_code/preprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="427">
+          <caret line="52" column="21" selection-start-line="52" selection-end-line="53" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/A3_code/code/a3_gmm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="215" column="18" lean-forward="true" selection-start-line="215" selection-start-column="18" selection-end-line="215" selection-end-column="18" />
+        <state relative-caret-position="215">
+          <caret line="278" column="77" selection-start-line="278" selection-start-column="32" selection-end-line="278" selection-end-column="77" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>
@@ -282,8 +402,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="77" column="4" selection-start-line="77" selection-start-column="4" selection-end-line="77" selection-end-column="4" />
+        <state relative-caret-position="-877">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
