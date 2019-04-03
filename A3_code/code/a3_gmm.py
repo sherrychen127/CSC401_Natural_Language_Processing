@@ -2,9 +2,11 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import os, fnmatch
 import random
-from math import *
-from scipy.misc import logsumexp
 
+
+from math import *
+from scipy.special import logsumexp
+import sys
 dataDir = '/u/cs401/A3/data/'
 
 
@@ -39,10 +41,9 @@ def log_b_m_x(m, x, myTheta, preComputedForM=[]):
     if len(preComputedForM) > 0:
         log_b_m = term1 - preComputedForM[m]
         return log_b_m
-
     d = len(x)
-    term2 = 0.5*np.sum(np.square(mu_m)/cov_m) + d/2*log(2*pi) + 0.5*np.sum(np.log(cov_m))
-
+    #term2 = 0.5*np.sum(np.square(mu_m)/cov_m) + d/2*log(2*np.pi) + 0.5*np.log(np.prod(cov_m))
+    term2 = 0.5 * np.sum(np.square(mu_m)/cov_m) + d/2*np.log(2*np.pi) + 1/2 * np.sum(np.log(myTheta.Sigma[m]))
     log_b_m = term1 - term2
     '''
     x_minus_mu = x-mu_m #(1,d)
@@ -63,26 +64,15 @@ def log_p_m_x(m, x, myTheta):
     ''' Returns the log probability of the m^{th} component given d-dimensional vector x, and model myTheta
         See equation 2 of handout
     '''
-
     weights = myTheta.omega
     w = weights[m]
     log_b = log_b_m_x(m, x, myTheta) #log == ln????
-    #b = np.exp(log_b)
-    #w_b = w*b #
-    log_w_b = logsumexp(log_b, b = w)
+    log_w_b = scipy.special.logsumexp(log_b, b = w)
 
     M = np.shape(weights)[0]
     log_bk = np.array([log_b_m_x(i, x, myTheta) for i in range(M)])
-    #wk_bk = np.dot(bk.reshape(np.size(bk)[0], 1), weights) #(1,1)
-    #p_m_x = w_b/wk_bk
-    #log_p_m_x = log(p_m_x)
-
-
-    log_wk_bk = logsumexp(log_bk, b = weights)
-
+    log_wk_bk = scipy.special.logsumexp(log_bk, b = weights)
     log_p_m_x_val = log_w_b - log_wk_bk
-
-    print("finished one")
     return log_p_m_x_val
 
     
@@ -98,12 +88,40 @@ def logLik( log_Bs, myTheta ):
 
         See equation 3 of the handout
     '''
-    B_s = np.exp(log_Bs)
-    temp = np.dot(B_s.T, myTheta.omega)
-    res = np.sum(temp)
-    return res
+    log_w = np.log(myTheta.omega)
+    log_wm_bm = np.sum(logsumexp(log_Bs + log_w, axis = 0))
+    return log_wm_bm
 
-    
+
+def log_b_x(X, myTheta, preComputedForM=[]):
+    '''
+    :param M:
+    :param X: (T, d)
+    :param myTheta:
+    :param preComputedForM:
+    :return: log_b_x, (M,T)
+    '''
+
+    T, D = np.shape(X)
+    mu = myTheta.mu #(M, d)
+    cov = myTheta.Sigma #(M, d)
+    X_squared = np.reshape(np.trace(np.dot(X, X.T)), (T, 1)) #(T, 1)
+    term1 = -1*np.sum(0.5*X_squared/cov[:,None,:] - np.dot(mu, X.T)[:,:,None]/cov[:,None,:]) ###not sure about the broach case dimension
+    if len(preComputedForM) > 0:
+        preComputedForM = np.array(preComputedForM)
+        log_b = term1 - preComputedForM
+        return log_b
+    preComputedForM = pre_computed_for_M(X, myTheta)
+    log_b = term1 - preComputedForM
+    return log_b
+
+def log_p_x(log_b, myTheta):
+    w = myTheta.omega.ravel() #(M, ) 1D array
+    log_w_b = np.transpose(np.log(w) + np.transpose(log_b))
+    log_wk_bk = np.sum(log_w_b, axis = 0)
+    log_p = log_w_b - log_wk_bk
+    return log_p
+
 def train( speaker, X, M=8, epsilon=0.0, maxIter=20 ):
     ''' Train a model for the given speaker. Returns the theta (omega, mu, sigma)'''
     myTheta = theta(speaker, M, X.shape[1])
@@ -112,68 +130,97 @@ def train( speaker, X, M=8, epsilon=0.0, maxIter=20 ):
     myTheta.omega = np.zeros((M,1)) + 1/M #initialize weights uniformly
     rand_ind = np.random.randint(X.shape[0], size= M)
     myTheta.mu = X[rand_ind,:]# (M,d)
-    myTheta.Sigma = np.ones((M,d))
-
-
-
+    myTheta.Sigma = np.ones((M, d))
     i = 0
     prev_L = float('-inf')
     improvement = float('inf')
-    while i<= maxIter and improvement >= epsilon:
+    while i<= maxIter and improvement > epsilon:
         #compute Intermediate Result
-        log_b_x, log_p_x = calculate_intermediate_result(X, M, myTheta)
-        L = logLik(log_b_x, myTheta) #compute log-likelihood
-        myTheta = update_parameter(log_b_x, log_p_x, X, myTheta) #update parameter
+        #log_b_x, log_p_x = calculate_intermediate_result(X, M, myTheta)
+        log_Bs = compute_log_Bs(myTheta, X)
+        log_WB = log_Bs + np.log(myTheta.omega)
+        log_P = log_WB - logsumexp(log_WB, axis=0)
+
+        L = logLik(log_Bs, myTheta) #compute log-likelihood
+
+        myTheta = update_parameter(log_P, X, myTheta) #update parameter
         improvement = L - prev_L
         prev_L = L
         i += 1
-
+        print("log_likelihood:", L)
     return myTheta
 
 
-def update_parameter(log_b_x, log_p_x, X, myTheta):
+def update_parameter(log_p_x, X, myTheta):
     p_x = np.exp(log_p_x) # M, T
+    M, T = np.shape(p_x)
+    for m in range(M):
+        p_m_x = p_x[m]
+        p_sum_m = np.sum(p_m_x)
+        #update weights
+        myTheta.omega[m] = p_sum_m/T
+        #mu
+        myTheta.mu[m] = np.dot(p_m_x, X)/p_sum_m
+        #sigma
+        sigma_m = (np.dot(p_m_x, np.square(X))/p_sum_m) - (np.square(myTheta.mu[m]))
+        myTheta.Sigma[m] = sigma_m
+    '''
+    sum_p_x = np.reshape(np.sum(p_x, axis=1),(M, 1)) #(M, 1)
+    myTheta.omega = sum_p_x/T # (M, 1) update weights
 
-    myTheta.omega = np.sum(p_x, axis = 1)/p_x.shape[1] # (M, 1)
-    myTheta.mu = np.dot(p_x, X)/np.sum(p_x, axis = 1) #(M, d)
+    #update variance (variance first or mean first?)
+    X_squared = np.square(X) # X^2 = (T, d)
+    sum_p_x_squared = np.dot(p_x, X_squared) #(M, d)
+    mu_squared = np.square(myTheta.mu)
+    E_X_squared = sum_p_x_squared / sum_p_x #(M, d)
+    var = E_X_squared - mu_squared # (M, d)
+    myTheta.Sigma = var
 
-    X_2 = X.dot(X) # X^2 = (T,D)
-    sum_p_x_2 = X_2.T.dot(p_x)
-
-    mu_2 = np.dot(myTheta.mu, myTheta.mu)
-    E_X_squared = sum_p_x_2 / np.sum(p_x, axis = 1)
-    var = E_X_squared - mu_2 #D, M
-    myTheta.Sigma = var.T
-
+    #update mean
+    myTheta.mu = np.dot(p_x, X)/sum_p_x  #( M,d)/(M,1) = (M, d), update mean
+    '''
     return myTheta
 
 
 def pre_computed_for_M(X, myTheta):
-    (T,d) = np.shape(X)
+    (T, d) = np.shape(X)
     mean = myTheta.mu #(M,1)
     cov = myTheta.Sigma #(M, d)
 
-    term1 = 0.5*np.sum(np.square(mean)/cov, axis= 1) #is it (M, d)-> (M,1)
+    cov_recip = np.reciprocal(cov) #calculate reciprocal
+    term1 = 0.5*np.sum(np.multiply(np.square(mean), cov_recip), axis= 1) #is it (M, d)-> (M,1)
     term2 = d/2*log(2*pi)
-    term3 = 0.5*np.sum(np.log(cov), axis = 1) #(M,1)
-
+    term3 = 0.5*np.log(np.prod(cov, axis = 1)) #(M,1)
     preComputedForM = term1 + term2 + term3
     return preComputedForM
 
 
 def calculate_intermediate_result(X, M, myTheta):
-    PreComputedForM = pre_computed_for_M(X, myTheta)
-    log_b_x = []
-    log_b_x = [[log_b_m_x(m, X[i], myTheta, PreComputedForM) for i in range(X.shape[0])] for m in range(M)] #(M, T)
+    PreComputedForM_val = pre_computed_for_M(X, myTheta)
+    log_bx = [[log_b_m_x(m, X[i], myTheta, PreComputedForM_val) for i in range(X.shape[0])] for m in range(M)] #(M, T)
+    #log_bx = log_b_x(X, myTheta, preComputedForM = PreComputedForM_val)
+    print("done log_bx")
+    #log_px = [[log_p_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M,T)
+    log_px = log_p_x(log_bx, myTheta)
+    print("done log_p_x")
+    return log_bx, log_px
 
-    log_p_x = [[log_p_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M,T)
 
-    return log_b_x, log_p_x
+def compute_log_Bs(myTheta, X):
+    T, d = np.shape(X)
+    M, a = np.shape(myTheta.omega)
+    Log_Bs = np.zeros((M, T))
+    for m in range(M):
+        term1 = np.sum(np.square(X - myTheta.mu[m]) / myTheta.Sigma[m], axis=1)
+        term2 = d/2 * np.log(2*np.pi)
+        term3 = 1./2 * np.sum(np.log(np.square(np.prod(myTheta.Sigma[m]))))
+        log_bs = - term1 - term2 - term3
+        Log_Bs[m] = log_bs
+    return Log_Bs
 
 
 
-
-def test( mfcc, correctID, models, k=5 ):
+def test(mfcc, correctID, models, k=5 ):
     ''' Computes the likelihood of 'mfcc' in each model in 'models', where the correct model is 'correctID'
         If k>0, print to stdout the actual speaker and the k best likelihoods in this format:
                [ACTUAL_ID]
@@ -190,10 +237,19 @@ def test( mfcc, correctID, models, k=5 ):
     bestModel = -1
     log_like = []
     for model in models: #(30 models/speakers, theta)
-        log_b_x, log_p_x = calculate_intermediate_result(mfcc, model.omega.shape[0], model)
-        log_like.append(logLik(log_b_x, model))
-    bestModel = np.argmax(log_like)
+        log_Bs = compute_log_Bs(model, mfcc)
+        log_like.append(logLik(log_Bs, model))
 
+    bestModel = np.argmax(np.array(log_like))
+    #print("correctID:", correctID)
+    #print("bestmodel:", bestModel)
+    print(models[correctID].name)
+    if k>0:
+        k_best_models = np.argsort(np.array(log_like))[-k:][::-1] #reverse order
+
+        #print("k_best_model:", k_best_models)
+        for i in k_best_models:
+            print(models[i].name, ' ', log_like[i])
     ###########write to stdout#########################
 
 
@@ -204,8 +260,6 @@ def test( mfcc, correctID, models, k=5 ):
 
 
 if __name__ == "__main__":
-
-
     trainThetas = []
     testMFCCs = []
     print('TODO: you will need to modify this main block for Sec 2.3')
@@ -217,7 +271,7 @@ if __name__ == "__main__":
     # train a model for each speaker, and reserve data for testing
     for subdir, dirs, files in os.walk(dataDir):
         for speaker in dirs:
-            print( speaker )
+            print( "speaker:", speaker )
 
             files = fnmatch.filter(os.listdir( os.path.join( dataDir, speaker ) ), '*npy')
             random.shuffle( files )
@@ -229,14 +283,13 @@ if __name__ == "__main__":
             for file in files:
                 myMFCC = np.load( os.path.join( dataDir, speaker, file ) )
                 X = np.append( X, myMFCC, axis=0)
-
             trainThetas.append( train(speaker, X, M, epsilon, maxIter) )
 
     # evaluate 
     numCorrect = 0;
-    for i in range(0,len(testMFCCs)):
-        numCorrect += test( testMFCCs[i], i, trainThetas, k ) 
+    for i in range(0, len(testMFCCs)):
+        numCorrect += test( testMFCCs[i], i, trainThetas, k )
     accuracy = 1.0*numCorrect/len(testMFCCs)
-    print(accuracy)
+    print("accuracy:", accuracy)
 
 
