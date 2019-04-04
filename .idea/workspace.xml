@@ -27,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-877">
-              <caret line="54" selection-start-line="54" selection-end-line="54" />
+            <state relative-caret-position="310">
+              <caret line="32" column="56" lean-forward="true" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="56" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -280,6 +280,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07466243" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -402,8 +403,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-877">
-          <caret line="54" selection-start-line="54" selection-end-line="54" />
+        <state relative-caret-position="310">
+          <caret line="32" column="56" lean-forward="true" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="56" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

@@ -111,7 +111,8 @@ if __name__ == "__main__":
     #sentence = "0 LD/E:INTERACTIVE  m- / so so on it./ I mean, <BR> I don't know./ <BR> I did alright./ <LG> "
     #sentence = preprocess(sentence)
     #print(Levenshtein("".split(), "who is there".split()))
-
+    google_wer_history = []
+    kalbi_wer_history = []
 
     for subdir, dirs, files in os.walk(dataDir):
         for speaker in dirs:
@@ -129,8 +130,6 @@ if __name__ == "__main__":
             google = google_file.readlines()
             kalbi = kalbi_file.readlines()
 
-            google_wer_history = []
-            kalbi_wer_history = []
             #print(len(ref), len(google), len(kalbi))
             #skip speakers when the transcript file is empty
             if len(ref)>0:
@@ -142,14 +141,21 @@ if __name__ == "__main__":
                     wer_google = Levenshtein(ref_sentence, google_sentence)
                     wer_kalbi = Levenshtein(ref_sentence, kalbi_sentence)
 
-                    wer_google
+                    google_wer_history.append(wer_google)
+                    kalbi_wer_history.append(wer_kalbi)
                     print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "google", i, wer_google[0], wer_google[1], wer_google[2], wer_google[3]))
                     print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "kalbi", i, wer_kalbi[0], wer_kalbi[1], wer_kalbi[2], wer_kalbi[3]))
+
+
+
+                    #average and standard deviation
 
                     #[SPEAKER] [SYSTEM] [i] [WER] S:[numSubstitutions], I:[numInsertions], D:[numDeletions]
             ref_file.close()
             google_file.close()
             kalbi_file.close()
+    print("google average:{}, std: {}".format(np.average(google_wer_history), np.std(google_wer_history)))
+    print("kalbi average:{}, std: {}".format(np.average(kalbi_wer_history), np.std(kalbi_wer_history)))
 
 
 
