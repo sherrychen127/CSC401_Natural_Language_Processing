@@ -7,9 +7,9 @@ import random
 from math import *
 from scipy.special import logsumexp
 import sys
+
+
 dataDir = '/u/cs401/A3/data/'
-
-
 ############ work from home
 PC = True
 if PC:
@@ -32,18 +32,23 @@ def log_b_m_x(m, x, myTheta, preComputedForM=[]):
         If you do this, you pass that precomputed component in preComputedForM
 
     '''
-
+    #x(1,d)
     mu_m = myTheta.mu[m] #1
     cov_m = myTheta.Sigma[m] #(1,d)
 
-    term1 = -1*np.sum(0.5*np.square(x)/cov_m - mu_m*x/cov_m)
+    ###test
+    a = np.multiply(mu_m, x)
+    a = a/cov_m
+    ###
+
+    term1 = -1*np.sum(0.5*np.square(x)/cov_m - np.multiply(mu_m, x)/cov_m)
 
     if len(preComputedForM) > 0:
         log_b_m = term1 - preComputedForM[m]
         return log_b_m
     d = len(x)
-    #term2 = 0.5*np.sum(np.square(mu_m)/cov_m) + d/2*log(2*np.pi) + 0.5*np.log(np.prod(cov_m))
-    term2 = 0.5 * np.sum(np.square(mu_m)/cov_m) + d/2*np.log(2*np.pi) + 1/2 * np.sum(np.log(myTheta.Sigma[m]))
+    term2 = 0.5*np.sum(np.square(mu_m)/cov_m) + d/2*log(2*np.pi) + 0.5*np.log(np.prod(cov_m))
+    #term2 = 0.5 * np.sum(np.square(mu_m)/cov_m) + d/2*np.log(2*np.pi) + 1/2 * np.sum(np.log(myTheta.Sigma[m]))
     log_b_m = term1 - term2
     '''
     x_minus_mu = x-mu_m #(1,d)
@@ -67,11 +72,11 @@ def log_p_m_x(m, x, myTheta):
     weights = myTheta.omega
     w = weights[m]
     log_b = log_b_m_x(m, x, myTheta) #log == ln????
-    log_w_b = scipy.special.logsumexp(log_b, b = w)
+    log_w_b = logsumexp(log_b, b = w)
 
     M = np.shape(weights)[0]
     log_bk = np.array([log_b_m_x(i, x, myTheta) for i in range(M)])
-    log_wk_bk = scipy.special.logsumexp(log_bk, b = weights)
+    log_wk_bk = logsumexp(log_bk, b = weights)
     log_p_m_x_val = log_w_b - log_wk_bk
     return log_p_m_x_val
 
@@ -92,63 +97,6 @@ def logLik( log_Bs, myTheta ):
     log_wm_bm = np.sum(logsumexp(log_Bs + log_w, axis = 0))
     return log_wm_bm
 
-
-def log_b_x(X, myTheta, preComputedForM=[]):
-    '''
-    :param M:
-    :param X: (T, d)
-    :param myTheta:
-    :param preComputedForM:
-    :return: log_b_x, (M,T)
-    '''
-
-    T, D = np.shape(X)
-    mu = myTheta.mu #(M, d)
-    cov = myTheta.Sigma #(M, d)
-    X_squared = np.reshape(np.trace(np.dot(X, X.T)), (T, 1)) #(T, 1)
-    term1 = -1*np.sum(0.5*X_squared/cov[:,None,:] - np.dot(mu, X.T)[:,:,None]/cov[:,None,:]) ###not sure about the broach case dimension
-    if len(preComputedForM) > 0:
-        preComputedForM = np.array(preComputedForM)
-        log_b = term1 - preComputedForM
-        return log_b
-    preComputedForM = pre_computed_for_M(X, myTheta)
-    log_b = term1 - preComputedForM
-    return log_b
-
-def log_p_x(log_b, myTheta):
-    w = myTheta.omega.ravel() #(M, ) 1D array
-    log_w_b = np.transpose(np.log(w) + np.transpose(log_b))
-    log_wk_bk = np.sum(log_w_b, axis = 0)
-    log_p = log_w_b - log_wk_bk
-    return log_p
-
-def train( speaker, X, M=8, epsilon=0.0, maxIter=20 ):
-    ''' Train a model for the given speaker. Returns the theta (omega, mu, sigma)'''
-    myTheta = theta(speaker, M, X.shape[1])
-
-    ##initialization
-    myTheta.omega = np.zeros((M,1)) + 1/M #initialize weights uniformly
-    rand_ind = np.random.randint(X.shape[0], size= M)
-    myTheta.mu = X[rand_ind,:]# (M,d)
-    myTheta.Sigma = np.ones((M, d))
-    i = 0
-    prev_L = float('-inf')
-    improvement = float('inf')
-    while i<= maxIter and improvement > epsilon:
-        #compute Intermediate Result
-        #log_b_x, log_p_x = calculate_intermediate_result(X, M, myTheta)
-        log_Bs = compute_log_Bs(myTheta, X)
-        log_WB = log_Bs + np.log(myTheta.omega)
-        log_P = log_WB - logsumexp(log_WB, axis=0)
-
-        L = logLik(log_Bs, myTheta) #compute log-likelihood
-
-        myTheta = update_parameter(log_P, X, myTheta) #update parameter
-        improvement = L - prev_L
-        prev_L = L
-        i += 1
-        print("log_likelihood:", L)
-    return myTheta
 
 
 def update_parameter(log_p_x, X, myTheta):
@@ -197,11 +145,11 @@ def pre_computed_for_M(X, myTheta):
 
 def calculate_intermediate_result(X, M, myTheta):
     PreComputedForM_val = pre_computed_for_M(X, myTheta)
+
     log_bx = [[log_b_m_x(m, X[i], myTheta, PreComputedForM_val) for i in range(X.shape[0])] for m in range(M)] #(M, T)
-    #log_bx = log_b_x(X, myTheta, preComputedForM = PreComputedForM_val)
     print("done log_bx")
-    #log_px = [[log_p_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M,T)
-    log_px = log_p_x(log_bx, myTheta)
+    log_px = [[log_p_m_x(m, X[i], myTheta) for i in range(X.shape[0])] for m in range(M)] #(M,T)
+
     print("done log_p_x")
     return log_bx, log_px
 
@@ -217,6 +165,38 @@ def compute_log_Bs(myTheta, X):
         log_bs = - term1 - term2 - term3
         Log_Bs[m] = log_bs
     return Log_Bs
+
+
+def train( speaker, X, M=8, epsilon=0.0, maxIter=20 ):
+    ''' Train a model for the given speaker. Returns the theta (omega, mu, sigma)'''
+    myTheta = theta(speaker, M, X.shape[1])
+    (M, d) = np.shape(myTheta.Sigma)
+    ##initialization
+    myTheta.omega = np.zeros((M,1)) + 1/M #initialize weights uniformly
+    rand_ind = np.random.randint(X.shape[0], size= M)
+    myTheta.mu = X[rand_ind,:]# (M,d)
+    myTheta.Sigma = np.ones((M, d))
+    i = 0
+    prev_L = float('-inf')
+    improvement = float('inf')
+    while i<= maxIter and improvement > epsilon:
+        #compute Intermediate Result
+        log_Bs, log_P = calculate_intermediate_result(X, M, myTheta)
+        #log_Bs = compute_log_Bs(myTheta, X)
+        #log_WB = log_Bs + np.log(myTheta.omega)
+        #log_P = log_WB - logsumexp(log_WB, axis=0)
+
+        L = logLik(log_Bs, myTheta) #compute log-likelihood
+
+        myTheta = update_parameter(log_P, X, myTheta) #update parameter
+        improvement = L - prev_L
+        prev_L = L
+        i += 1
+
+
+
+        print("log_likelihood:", L)
+    return myTheta
 
 
 
@@ -241,8 +221,8 @@ def test(mfcc, correctID, models, k=5 ):
         log_like.append(logLik(log_Bs, model))
 
     bestModel = np.argmax(np.array(log_like))
-    #print("correctID:", correctID)
-    #print("bestmodel:", bestModel)
+    stdout = []
+    stdout.append("{}\n".format(models[correctID].name))
     print(models[correctID].name)
     if k>0:
         k_best_models = np.argsort(np.array(log_like))[-k:][::-1] #reverse order
@@ -250,19 +230,93 @@ def test(mfcc, correctID, models, k=5 ):
         #print("k_best_model:", k_best_models)
         for i in k_best_models:
             print(models[i].name, ' ', log_like[i])
+            stdout.append("{} {}\n".format(models[i].name, log_like[i]))
+    stdout.append("\n")
     ###########write to stdout#########################
-
-
-
-
+    gmm_likes_file.writelines(stdout)
     ###################################################
     return 1 if (bestModel == correctID) else 0
 
-
-if __name__ == "__main__":
+def experiment():
     trainThetas = []
     testMFCCs = []
-    print('TODO: you will need to modify this main block for Sec 2.3')
+    print('Sec 2.4')
+    d = 13
+    k = 5  # number of top speakers to display, <= 0 if none
+    M = 8
+    M_list = [8, 6, 4, 2]
+    epsilon = 0.0
+    maxIter = 20
+    stdout = []
+    #################################################### test different M #############
+    '''
+    print("experiment with differnt M")
+    for m in M_list:
+        for subdir, dirs, files in os.walk(dataDir):
+            for speaker in dirs:
+                print("speaker:", speaker)
+
+                files = fnmatch.filter(os.listdir(os.path.join(dataDir, speaker)), '*npy')
+                random.shuffle(files)
+
+                testMFCC = np.load(os.path.join(dataDir, speaker, files.pop()))
+                testMFCCs.append(testMFCC)
+
+                X = np.empty((0, d))
+                for file in files:
+                    myMFCC = np.load(os.path.join(dataDir, speaker, file))
+                    X = np.append(X, myMFCC, axis=0)
+                trainThetas.append(train(speaker, X, m, epsilon, maxIter))
+
+        # evaluate
+        numCorrect = 0
+        for i in range(0, len(testMFCCs)):
+            numCorrect += test(testMFCCs[i], i, trainThetas, k)
+        accuracy = 1.0 * numCorrect / len(testMFCCs)
+        print("accuracy:", accuracy)
+        stdout.append("M:{}, MaxIter:{}, accuracy:{}".format(m, maxIter, accuracy))
+    '''
+    M = 8
+    MaxIter_list = [20, 12, 6, 4, 2, 1]
+    print("experiment with iteration")
+    for Iter in MaxIter_list:
+        for subdir, dirs, files in os.walk(dataDir):
+            for speaker in dirs:
+                print("speaker:", speaker)
+                files = fnmatch.filter(os.listdir(os.path.join(dataDir, speaker)), '*npy')
+                random.shuffle(files)
+
+                testMFCC = np.load(os.path.join(dataDir, speaker, files.pop()))
+                testMFCCs.append(testMFCC)
+
+                X = np.empty((0, d))
+                for file in files:
+                    myMFCC = np.load(os.path.join(dataDir, speaker, file))
+                    X = np.append(X, myMFCC, axis=0)
+                trainThetas.append(train(speaker, X, M, epsilon, Iter))
+        # evaluate
+        numCorrect = 0
+        for i in range(0, len(testMFCCs)):
+            numCorrect += test(testMFCCs[i], i, trainThetas, k)
+        accuracy = 1.0 * numCorrect / len(testMFCCs)
+        #print("accuracy:", accuracy)
+        stdout.append("M:{}, MaxIter:{}, accuracy:{}".format(M, Iter, accuracy))
+
+    print("gmmDiscussion.txt")
+    print(stdout)
+
+    Discussion_file = open("gmmDiscussion.txt", "w")
+    Discussion_file.writelines(stdout)
+    Discussion_file.close()
+
+
+if __name__ == "__main__":
+    #experiment()
+
+
+    trainThetas = []
+    testMFCCs = []
+    print('Sec 2.3')
     d = 13
     k = 5  # number of top speakers to display, <= 0 if none
     M = 8
@@ -286,10 +340,13 @@ if __name__ == "__main__":
             trainThetas.append( train(speaker, X, M, epsilon, maxIter) )
 
     # evaluate 
-    numCorrect = 0;
+    numCorrect = 0
+    gmm_likes_file = open("gmmLiks.txt", "w")
     for i in range(0, len(testMFCCs)):
         numCorrect += test( testMFCCs[i], i, trainThetas, k )
     accuracy = 1.0*numCorrect/len(testMFCCs)
     print("accuracy:", accuracy)
+    gmm_likes_file.close()
 
+    #experiment()
 

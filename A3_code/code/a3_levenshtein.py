@@ -91,15 +91,19 @@ def backtrack(R, B, n, m):
             m = m-1
             n = n-1
             prev = R[n][m]
-            if cur!= next: substitution += cur - prev
+            if cur != next: substitution += cur - prev
     return int(substitution), int(insertion), int(deletion)
 
 
 def preprocess(sentence):
-    sentence = re.sub('<[^>]*>', '', sentence)     #remove label
+    #sentence = re.sub('<[^>]*>', '', sentence)     #remove label
+    sentence = sentence.split()
+    sentence.pop(0)
+    sentence.pop(1)
+    sentence = " ".join(sentence)
     for c in string.punctuation:
         if c != '[' and c != ']':
-            sentence = sentence.replace(c, " ")    #remove punctuation except for []
+            sentence = sentence.replace(c, "")    #remove punctuation except for []
     sentence = sentence.lower()    #lowercase
     sentence = re.sub('\s+', ' ', sentence) #remove the multiple spaces
     return sentence.split()
@@ -114,6 +118,7 @@ if __name__ == "__main__":
     google_wer_history = []
     kalbi_wer_history = []
 
+    stdout = []
     for subdir, dirs, files in os.walk(dataDir):
         for speaker in dirs:
             print("speaker:", speaker)
@@ -141,10 +146,12 @@ if __name__ == "__main__":
                     wer_google = Levenshtein(ref_sentence, google_sentence)
                     wer_kalbi = Levenshtein(ref_sentence, kalbi_sentence)
 
-                    google_wer_history.append(wer_google)
-                    kalbi_wer_history.append(wer_kalbi)
+                    google_wer_history.append(wer_google[0])
+                    kalbi_wer_history.append(wer_kalbi[0])
                     print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "google", i, wer_google[0], wer_google[1], wer_google[2], wer_google[3]))
                     print("{} {} {} {} S:{} I:{} D:{}".format(speaker, "kalbi", i, wer_kalbi[0], wer_kalbi[1], wer_kalbi[2], wer_kalbi[3]))
+                    stdout.append("{} {} {} {} S:{} I:{} D:{} \n".format(speaker, "google", i, wer_google[0], wer_google[1], wer_google[2], wer_google[3]))
+                    stdout.append("{} {} {} {} S:{} I:{} D:{} \n".format(speaker, "kalbi", i, wer_kalbi[0], wer_kalbi[1], wer_kalbi[2], wer_kalbi[3]))
 
 
 
@@ -154,8 +161,20 @@ if __name__ == "__main__":
             ref_file.close()
             google_file.close()
             kalbi_file.close()
+
     print("google average:{}, std: {}".format(np.average(google_wer_history), np.std(google_wer_history)))
     print("kalbi average:{}, std: {}".format(np.average(kalbi_wer_history), np.std(kalbi_wer_history)))
+    stdout.append("google average:{}, std: {}\n".format(np.average(google_wer_history), np.std(google_wer_history)))
+    stdout.append("kalbi average:{}, std: {}\n".format(np.average(kalbi_wer_history), np.std(kalbi_wer_history)))
+
+
+
+    #write to stdout -> txt file
+    file = open("asrDiscussion.txt", "w")
+    file.writelines(stdout)
+    file.close()
+
+
 
 
 
