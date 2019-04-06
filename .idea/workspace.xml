@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64bcfd97-6286-4d6d-9829-3df84ad2b614" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/A3_code/code/a3_bonus.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/A3_code/code/a3_gmm.py" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/a3_gmm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/a3_levenshtein.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A3_code/code/archives/a3_bonus.txt" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/archives/a3_bonus.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A3_code/code/archives/asrDiscussion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/archives/asrDiscussion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A3_code/code/archives/gmmLiks.txt" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/archives/gmmLiks.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A3_code/code/gmmLiks.txt" beforeDir="false" afterPath="$PROJECT_DIR$/A3_code/code/gmmLiks.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/A3_code/~$a3_rubric.xlsx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +20,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/A3_code/code/a3_gmm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="78" column="16" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
+            <state relative-caret-position="144">
+              <caret line="54" column="7" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -65,13 +67,14 @@
       <find>log_b_m_x</find>
       <find>d</find>
       <find>pre_computed_for_M</find>
-      <find>train</find>
       <find>calculate</find>
       <find>calculate_intermediate_re</find>
       <find>10B</find>
       <find>M</find>
       <find>2.3</find>
       <find>gmm</find>
+      <find>gmm_likes_file</find>
+      <find>train</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -89,7 +92,7 @@
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="485" />
-    <option name="y" value="22" />
+    <option name="y" value="23" />
     <option name="width" value="777" />
     <option name="height" value="711" />
   </component>
@@ -339,15 +342,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1429706" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.19178082" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.37945205" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3520548" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3410959" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -383,11 +385,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
-          <line>95</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
           <line>106</line>
           <option name="timeStamp" value="23" />
@@ -409,13 +406,48 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
-          <line>295</line>
+          <line>285</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/A3_code/code/a3_levenshtein.py</url>
           <line>99</line>
           <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>314</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>130</line>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>66</line>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>166</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>136</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>74</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3_code/code/a3_gmm.py</url>
+          <line>154</line>
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -464,8 +496,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/A3_code/code/a3_gmm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="78" column="16" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
+        <state relative-caret-position="144">
+          <caret line="54" column="7" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
           </folding>

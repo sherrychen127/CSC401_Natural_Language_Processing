@@ -1,0 +1,51 @@
+Sec 2.4
+(1) /*experiment with differnt M*/
+M:8, MaxIter:20, accuracy:1.0 
+M:6, MaxIter:20, accuracy:0.484375 
+M:4, MaxIter:20, accuracy:0.3229167
+M:2, MaxIter:20, accuracy:0.2421875 
+
+Comment: The accuracy significantly dropped when the number of components decreases. 
+
+
+(2)/*Experiment with different maxiteration:*/
+M:8, MaxIter:20, accuracy:1.0
+M:8, MaxIter:15, accuracy:1.0
+M:8, MaxIter:12, accuracy:1.0
+M:8, MaxIter:6, accuracy:1.0
+M:8, MaxIter:3, accuracy:1.0
+M:8, MaxIter:2, accuracy:1.0
+M:8, MaxIter:1, accuracy:0.90625
+
+Comment: The change in maxiteration doesn't really affect the accuracy as long as the number of iteration is above 2. This is because the algorithm converges within 1 or 2 steps, so a small number of iteration is sufficient to generate reasonable result. 
+
+
+(3) /*Experiment with different number of speakers, S*/
+(The test are ran on all test cases, include unseen speakers)
+M: 8 	 maxIter: 20 	 S: 32 	 Accuracy: 1.0
+M: 8 	 maxIter: 20 	 S: 24 	 Accuracy: 0.75
+M: 8 	 maxIter: 20 	 S: 16 	 Accuracy: 0.5
+M: 8 	 maxIter: 20 	 S: 8 	 Accuracy: 0.25
+M: 8 	 maxIter: 20 	 S: 4 	 Accuracy: 0.125
+ 
+Comment: When the different number of speaker decreases, the accuracy decreases as well. 
+
+Q: How might you improve the classification accuracy of the Gaussian mixtures, without adding more training data?
+
+A: The classification accuracy of the gaussian mixture can be improved by introducing discriminative pattern classification techniques such as support vector machines, and artificial neural network. 
+
+
+Q: When would your classifier decide that a given test utterance comes from none of the trained speaker models, and how would your classifier come to this decision?
+
+A:  The classifier would decide that a given test utterance comes from none of the trained speaker models models when the log likelihood of the test data given all models goes to negative infinity. When all of the training samples are equally likely, bm, the observation probability, will be zero, and thus the log likelihood will be negative infinity. 
+
+Q: Can you think of some alternative methods for doing speaker identification that don’t use Gaussian mixtures?
+
+An alternative method would be using neural network, like RNN or DNN models, to do speaker classification. The extracted features from the data would be the input to a neural network. The neural network can ba trained through forward-backward propagation using the sigmoid function as the activation function. The sigmoid output of the final layer would be a T dimensional vector to determine the likelihood of each speaker.
+
+The k-means algorithm can be used to classify speakers as well. The algorithm can group the utterance into speaker-specific clusters for T speakers. The test data can be classified by finding the closest cluster to the test data. 
+
+
+
+References:
+[1] Z. Ge, A. N. Iyer, S. Cheluvaraja, R. Sundaram, and A. Ganapathiraju, “Neural network based speaker classification and verification systems with enhanced features,” 2017 Intelligent Systems Conference (IntelliSys), 2017.

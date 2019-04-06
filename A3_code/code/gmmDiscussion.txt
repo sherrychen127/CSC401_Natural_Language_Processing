@@ -1,0 +1,1 @@
+M:8, MaxIter:20, speaker:10 accuracy:1.0

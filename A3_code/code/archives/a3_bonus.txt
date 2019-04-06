@@ -1,6 +1,12 @@
-pca_dim: 10 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
-pca_dim: 8 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
-pca_dim: 6 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
-pca_dim: 4 	 M: 8 	 maxIter: 20 	 Accuracy: 0.96875
-pca_dim: 3 	 M: 8 	 maxIter: 20 	 Accuracy: 0.9375
-pca_dim: 2 	 M: 8 	 maxIter: 20 	 Accuracy: 0.75
+A3: Bonus
+Perform dimension reduction using PCA()
+
+/* accuracy with different dimension */
+dim: 10 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
+dim: 8 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
+dim: 6 	 M: 8 	 maxIter: 20 	 Accuracy: 1.0
+dim: 4 	 M: 8 	 maxIter: 20 	 Accuracy: 0.96875
+dim: 3 	 M: 8 	 maxIter: 20 	 Accuracy: 0.9375
+dim: 2 	 M: 8 	 maxIter: 20 	 Accuracy: 0.75
+
+The accuracy is pretty high for the dimension from 2 - 10. The accuracy is 100% for dimension 10, 8 and 6. And the accuracy decreases as the number of reduced dimension decreases. 
